@@ -69,3 +69,7 @@ src/
 - El límite de historial es 20 tiradas.
 - El mini-juego genera 10 rondas con scoring por cercanía al objetivo.
 - El botón de limpiar datos borra historial, stats y ajustes (doble confirmación).
+
+## Estado de ejecución en este entorno
+
+No pude compilar ni ejecutar el proyecto en esta sesión porque la instalación de dependencias falla con error 403 del registro de npm. Con acceso normal a internet, `npm install` debería instalar Jest, Expo y el resto de dependencias para luego correr `npm test` o `npm start`.
