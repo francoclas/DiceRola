@@ -1,10 +1,15 @@
-// https://docs.expo.dev/guides/using-eslint/
 const { defineConfig } = require('eslint/config');
 const expoConfig = require('eslint-config-expo/flat');
 
 module.exports = defineConfig([
-  expoConfig,
+  ...expoConfig,
   {
-    ignores: ['dist/*'],
+    ignores: ['dist/*', 'coverage/*'],
+  },
+  {
+    files: ['**/*.{ts,tsx}'],
+    rules: {
+      'prettier/prettier': 'off',
+    },
   },
 ]);

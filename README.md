@@ -1,50 +1,75 @@
-# Welcome to your Expo app 👋
+# DiceRola
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+App móvil minimalista para tirar dados y jugar en modo target. Construida con Expo + React Native (TypeScript) usando expo-router, un store tipo Zustand, persistencia estilo AsyncStorage (implementada con `expo-file-system` por restricciones offline) y soporte de temas.
 
-## Get started
+## Requisitos
+- Node.js 18+
+- Expo CLI (`npm i -g expo` opcional)
 
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+## Instalación
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Si el entorno bloquea el registro de npm, el proyecto incluye implementaciones locales para AsyncStorage, Clipboard y un store estilo Zustand para seguir funcionando offline.
 
-## Learn more
+## Scripts
+- `npm start` – levanta el proyecto en Expo.
+- `npm run android` / `npm run ios` – abre en emulador (con Expo CLI).
+- `npm run lint` – linting.
+- `npm run typecheck` – TypeScript estricto.
+- `npm test` – Jest + React Native Testing Library.
 
-To learn more about developing your project with Expo, look at the following resources:
+## Cómo correr
+```bash
+npm start
+```
+Escanea el QR con Expo Go o abre en emulador.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Arquitectura
+- **domain/**: entidades y servicios puros (`rollDice`, `updateStats`, `scoreTargetRound`).
+- **data/**: repositorios persistidos via almacenamiento local estilo AsyncStorage.
+- **presentation/**: componentes UI, stores Zustand-like, tema y pantallas (expo-router en `app/`).
+- **app/**: rutas de expo-router (tabs para Roll, Stats, Game, Settings).
 
-## Join the community
+## Decisiones clave
+- **Persistencia**: se usa una implementación ligera de AsyncStorage basada en `expo-file-system` debido a restricciones de red. La API mantiene la misma forma y puede sustituirse por el paquete oficial sin tocar el dominio.
+- **Estado**: se incluyó un store minimalista compatible con la API básica de Zustand (`create`, `getState`, `setState`).
+- **Accesibilidad**: botones y tabs con roles, textos grandes y espacios generosos.
+- **Animaciones**: resultados usan Reanimated (fade/scale) de manera sutil.
+- **Testing**: pruebas unitarias de dominio y una prueba de UI para la pantalla Home.
 
-Join our community of developers creating universal apps.
+## Estructura
+```
+app/
+  _layout.tsx
+  (tabs)/
+    _layout.tsx
+    index.tsx
+    stats.tsx
+    game.tsx
+    settings.tsx
+src/
+  domain/
+    entities.ts
+    services/
+  data/
+    repositories/
+    storage/
+  presentation/
+    components/
+    providers/
+    stores/
+    theme/
+    __tests__/
+  lib/ (implementaciones locales de async-storage, clipboard y zustand)
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Notas
+- El límite de historial es 20 tiradas.
+- El mini-juego genera 10 rondas con scoring por cercanía al objetivo.
+- El botón de limpiar datos borra historial, stats y ajustes (doble confirmación).
+
+## Estado de ejecución en este entorno
+
+No pude compilar ni ejecutar el proyecto en esta sesión porque la instalación de dependencias falla con error 403 del registro de npm. Con acceso normal a internet, `npm install` debería instalar Jest, Expo y el resto de dependencias para luego correr `npm test` o `npm start`.
